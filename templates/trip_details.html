@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip Details - J^2 Vehicle Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>J^2 Vehicle Management System</h1>
+            <div class="user-info">
+                <span>Welcome, {{ username }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="trip-details-container">
+                <h2>Book a New Trip</h2>
+                <form action="{{ url_for('book_trip') }}" method="post">
+                    <div class="form-group">
+                        <label for="vehicle">Select Vehicle:</label>
+                        <select id="vehicle" name="vehicle" required>
+                            <option value="" disabled selected>Choose a vehicle</option>
+                            {% for vehicle in vehicles %}
+                            <option value="{{ vehicle.id }}">{{ vehicle.name }} - {{ vehicle.model }} (Capacity: {{ vehicle.capacity }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="driver">Select Driver:</label>
+                        <select id="driver" name="driver" required>
+                            <option value="" disabled selected>Choose a driver</option>
+                            {% for driver in drivers %}
+                            <option value="{{ driver.id }}">{{ driver.name }} ({{ driver.experience }} years experience)</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="start_date">Trip Start Date:</label>
+                            <input type="date" id="start_date" name="start_date" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="end_date">Trip End Date:</label>
+                            <input type="date" id="end_date" name="end_date" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="pickup_point">Pickup Point:</label>
+                        <input type="text" id="pickup_point" name="pickup_point" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="end_point">End Point:</label>
+                        <input type="text" id="end_point" name="end_point" required>
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button type="submit" class="btn book-btn">Book Trip</button>
+                        <a href="{{ url_for('trip_history') }}" class="btn view-history-btn">View Trip History</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

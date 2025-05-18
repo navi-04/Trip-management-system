@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip History - J^2 Vehicle Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>J^2 Vehicle Management System</h1>
+            <div class="user-info">
+                <span>Welcome, {{ username }}</span>
+                <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+            </div>
+        </header>
+        
+        <div class="content">
+            <div class="trip-history-container">
+                <h2>Your Trip History</h2>
+                
+                <div class="nav-buttons">
+                    <a href="{{ url_for('trip_details') }}" class="btn back-btn">Book Another Trip</a>
+                </div>
+                
+                {% if trips %}
+                <div class="trips-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Trip ID</th>
+                                <th>Vehicle</th>
+                                <th>Driver</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Pickup Point</th>
+                                <th>End Point</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for trip in trips %}
+                            <tr>
+                                <td>{{ trip.id }}</td>
+                                <td>{{ trip.vehicle_name }}</td>
+                                <td>{{ trip.driver_name }}</td>
+                                <td>{{ trip.start_date }}</td>
+                                <td>{{ trip.end_date }}</td>
+                                <td>{{ trip.pickup_point }}</td>
+                                <td>{{ trip.end_point }}</td>
+                                <td>{{ trip.status }}</td>
+                                <td>
+                                    {% if trip.status != 'cancelled' %}
+                                    <form action="{{ url_for('cancel_trip', trip_id=trip.id) }}" method="post" class="inline-form">
+                                        <button type="submit" class="btn cancel-btn" onclick="return confirm('Are you sure you want to cancel this trip?')">Cancel</button>
+                                    </form>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="no-trips">
+                    <p>You haven't booked any trips yet.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - J^2 Vehicle Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>J^2 Vehicle Management System - Admin</h1>
+            {% if dashboard %}
+            <div class="admin-info">
+                <a href="{{ url_for('admin_logout') }}" class="logout-btn">Logout</a>
+            </div>
+            {% endif %}
+        </header>
+        
+        <div class="content">
+            {% if not dashboard %}
+            <div class="admin-login-container">
+                <h2>Admin Login</h2>
+                <form action="{{ url_for('admin_login') }}" method="post">
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn login-btn">Login</button>
+                </form>
+                <div class="back-link">
+                    <a href="{{ url_for('index') }}">Back to User Login</a>
+                </div>
+            </div>
+            {% else %}
+            <div class="admin-dashboard">
+                <div class="admin-tabs">
+                    <ul class="tab-links">
+                        <li><a href="#bookings" class="tab-link active" onclick="openTab(event, 'bookings')">Bookings</a></li>
+                        <li><a href="#vehicles" class="tab-link" onclick="openTab(event, 'vehicles')">Vehicles</a></li>
+                        <li><a href="#drivers" class="tab-link" onclick="openTab(event, 'drivers')">Drivers</a></li>
+                    </ul>
+                </div>
+                
+                <div id="bookings" class="tab-content active">
+                    <h2>All Bookings</h2>
+                    {% if trips %}
+                    <div class="trips-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Trip ID</th>
+                                    <th>User</th>
+                                    <th>Contact</th>
+                                    <th>Vehicle</th>
+                                    <th>Driver</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Pickup Point</th>
+                                    <th>End Point</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for trip in trips %}
+                                <tr>
+                                    <td>{{ trip.id }}</td>
+                                    <td>{{ trip.username }}</td>
+                                    <td>{{ trip.contact }}</td>
+                                    <td>{{ trip.vehicle_name }}</td>
+                                    <td>{{ trip.driver_name }}</td>
+                                    <td>{{ trip.start_date }}</td>
+                                    <td>{{ trip.end_date }}</td>
+                                    <td>{{ trip.pickup_point }}</td>
+                                    <td>{{ trip.end_point }}</td>
+                                    <td>{{ trip.status }}</td>
+                                    <td>
+                                        {% if trip.status != 'cancelled' %}
+                                        <form action="{{ url_for('admin_cancel_trip', trip_id=trip.id) }}" method="post" class="inline-form">
+                                            <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to cancel this trip?')">Cancel</button>
+                                        </form>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="no-trips">
+                        <p>No bookings found in the system.</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div id="vehicles" class="tab-content">
+                    <div class="add-section">
+                        <h2>Add New Vehicle</h2>
+                        <form action="{{ url_for('add_vehicle') }}" method="post">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="vehicle-name">Vehicle Name</label>
+                                    <input type="text" id="vehicle-name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vehicle-model">Model</label>
+                                    <input type="text" id="vehicle-model" name="model" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="vehicle-capacity">Capacity</label>
+                                    <input type="number" id="vehicle-capacity" name="capacity" min="1" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn add-btn">Add Vehicle</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <h2>Vehicle List</h2>
+                    {% if vehicles %}
+                    <div class="vehicles-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Model</th>
+                                    <th>Capacity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vehicle in vehicles %}
+                                <tr>
+                                    <td>{{ vehicle.id }}</td>
+                                    <td>{{ vehicle.name }}</td>
+                                    <td>{{ vehicle.model }}</td>
+                                    <td>{{ vehicle.capacity }}</td>
+                                    <td>
+                                        <form action="{{ url_for('delete_vehicle', vehicle_id=vehicle.id) }}" method="post" class="inline-form">
+                                            <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this vehicle?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="no-vehicles">
+                        <p>No vehicles found in the system.</p>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div id="drivers" class="tab-content">
+                    <div class="add-section">
+                        <h2>Add New Driver</h2>
+                        <form action="{{ url_for('add_driver') }}" method="post">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="driver-name">Driver Name</label>
+                                    <input type="text" id="driver-name" name="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="driver-experience">Experience (Years)</label>
+                                    <input type="number" id="driver-experience" name="experience" min="0" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn add-btn">Add Driver</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <h2>Driver List</h2>
+                    {% if drivers %}
+                    <div class="drivers-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Name</th>
+                                    <th>Experience (Years)</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for driver in drivers %}
+                                <tr>
+                                    <td>{{ driver.id }}</td>
+                                    <td>{{ driver.name }}</td>
+                                    <td>{{ driver.experience }}</td>
+                                    <td>
+                                        <form action="{{ url_for('delete_driver', driver_id=driver.id) }}" method="post" class="inline-form">
+                                            <button type="submit" class="btn delete-btn" onclick="return confirm('Are you sure you want to delete this driver?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="no-drivers">
+                        <p>No drivers found in the system.</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

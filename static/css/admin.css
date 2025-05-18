@@ -1,0 +1,110 @@
+.admin-login-container {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+.login-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #3498db;
+    margin-top: 10px;
+}
+
+.login-btn:hover {
+    background-color: #2980b9;
+}
+
+.back-link {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.back-link a {
+    color: #7f8c8d;
+    text-decoration: none;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+.admin-tabs {
+    margin-bottom: 20px;
+}
+
+.tab-links {
+    list-style-type: none;
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    padding: 0;
+}
+
+.tab-links li {
+    margin-right: 5px;
+}
+
+.tab-link {
+    display: block;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ddd;
+    border-bottom: none;
+    border-radius: 5px 5px 0 0;
+}
+
+.tab-link.active {
+    background-color: white;
+    border-bottom: 2px solid white;
+    color: #3498db;
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+    background: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-radius: 0 0 5px 5px;
+    margin-top: -1px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.add-section {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.add-btn {
+    background-color: #2ecc71;
+    margin-top: 24px;  /* Align with form fields */
+}
+
+.add-btn:hover {
+    background-color: #27ae60;
+}
+
+.delete-btn {
+    background-color: #e74c3c;
+    padding: 5px 10px;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+.inline-form {
+    display: inline;
+}
